@@ -1,0 +1,8 @@
+parameters:
+  omdb_api_key: '%env(OMDB_API_KEY)%'
+
+services:
+  App\Service\MovieApiService:
+    arguments:
+      $omdbApiKey: '%omdb_api_key%'
+
