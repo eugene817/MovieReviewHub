@@ -18,15 +18,12 @@ class Genre
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, Actor>
-     */
-    #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'genres')]
-    private Collection $actors;
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: "genres")]
+    private Collection $movies;
 
     public function __construct()
     {
-        $this->actors = new ArrayCollection();
+        $this->movies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,23 +46,47 @@ class Genre
     /**
      * @return Collection<int, Actor>
      */
-    public function getActors(): Collection
+    public function getMovies(): Collection
     {
-        return $this->actors;
+        return $this->movies;
     }
 
-    public function addActor(Actor $actor): static
+    public function addMovie(Movie $movie): static
     {
-        if (!$this->actors->contains($actor)) {
-            $this->actors->add($actor);
+        if (!$this->movies->contains($movie)) {
+            $this->movies->add($movie);
         }
 
         return $this;
     }
 
-    public function removeActor(Actor $actor): static
+    public function removeMovie(Movie $movie): static
     {
-        $this->actors->removeElement($actor);
+        $this->movies->removeElement($movie);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Director>
+     */
+    public function getDirectors(): Collection
+    {
+        return $this->directors;
+    }
+
+    public function addDirector(Director $director): static
+    {
+        if (!$this->directors->contains($director)) {
+            $this->directors->add($director);
+        }
+
+        return $this;
+    }
+
+    public function removeDirector(Director $director): static
+    {
+        $this->directors->removeElement($director);
 
         return $this;
     }

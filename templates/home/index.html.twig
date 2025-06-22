@@ -1,0 +1,42 @@
+
+{# templates/home/index.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}Welcome | MovieReviewHub{% endblock %}
+
+{% block body %}
+  <section class="text-center mb-12">
+    <h1 class="text-5xl font-extrabold mb-4 dark:text-white">Welcome to MovieReviewHub</h1>
+    <p class="text-xl text-gray-400">Discover, review & share your favorite movies!</p>
+  </section>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% set cards = [
+      {'count': movieCount,    'label':'Movies',    'route':'app_movie_index'},
+      {'count': genreCount,    'label':'Genres',    'route':'app_genre_index'},
+      {'count': actorCount,    'label':'Actors',    'route':'app_actor_index'},
+      {'count': directorCount, 'label':'Directors', 'route':'app_director_index'},
+    ] %}
+    {% for card in cards %}
+      <a href="{{ path(card.route) }}"
+         class="block transform hover:-translate-y-2 transition rounded-2xl shadow-2xl
+                bg-gray-800 hover:bg-gray-700 text-gray-100 p-6 text-center">
+        <div class="text-4xl font-bold">{{ card.count }}</div>
+        <div class="mt-2 uppercase tracking-wide text-gray-400">{{ card.label }}</div>
+      </a>
+    {% endfor %}
+  </section>
+
+  <section class="mt-12 text-center">
+    {% if app.user %}
+      <a href="{{ path('app_movie_new') }}"
+         class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition">
+        Add New Movie
+      </a>
+    {% else %}
+      <a href="{{ path('app_login') }}"
+         class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition">
+        Login to Get Started
+      </a>
+    {% endif %}
+  </section>
+{% endblock %}

@@ -18,15 +18,12 @@ class Director
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, Actor>
-     */
-    #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'directors')]
-    private Collection $actors;
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: "directors")]
+    private Collection $movies;
 
     public function __construct()
     {
-        $this->actors = new ArrayCollection();
+        $this->movies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,23 +46,23 @@ class Director
     /**
      * @return Collection<int, Actor>
      */
-    public function getActors(): Collection
+    public function getMovies(): Collection
     {
-        return $this->actors;
+        return $this->movies;
     }
 
-    public function addActor(Actor $actor): static
+    public function addMovie(Movie $movie): static
     {
-        if (!$this->actors->contains($actor)) {
-            $this->actors->add($actor);
+        if (!$this->movies->contains($movie)) {
+            $this->movies->add($movie);
         }
 
         return $this;
     }
 
-    public function removeActor(Actor $actor): static
+    public function removeMovie(Movie $movie): static
     {
-        $this->actors->removeElement($actor);
+        $this->movies->removeElement($movie);
 
         return $this;
     }

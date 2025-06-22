@@ -1,29 +1,77 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Movie{% endblock %}
+{% block title %}{{ movie.title }}{% endblock %}
 
 {% block body %}
-    <h1>Movie</h1>
+  <div class="row">
+    <div class="col-md-4">
+      {% if movie.poster %}
+        <img src="{{ movie.poster }}" class="img-fluid rounded shadow-sm" alt="{{ movie.title }}">
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <h1>{{ movie.title }}</h1>
+      {% if movie.releaseDate %}
+        <p><strong>Release Date:</strong> {{ movie.releaseDate|date('Y-m-d') }}</p>
+      {% endif %}
+      {% if movie.rating %}
+        <p><strong>Rating:</strong> {{ movie.rating }}/10</p>
+      {% endif %}
+      {% if movie.genres|length %}
+        <p><strong>Genres:</strong>
+          {{ movie.genres|map(g => g.name)|join(', ') }}
+        </p>
+      {% endif %}
+      {% if movie.directors|length %}
+        <p><strong>Directors:</strong>
+          {{ movie.directors|map(d => d.name)|join(', ') }}
+        </p>
+      {% endif %}
+      {% if movie.actors|length %}
+        <p><strong>Actors:</strong>
+          {{ movie.actors|map(a => a.name)|join(', ') }}
+        </p>
+      {% endif %}
+      {% if movie.description %}
+        <div class="mt-3">
+          <h4>Description</h4>
+          <p>{{ movie.description }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
 
-   <h2>Opinions</h2>
-{% for review in movie.reviews %}
-  <strong>{{ review.author.email }}</strong>
-  <span>{{ review.rating }}/10</span>
-  <p>{{ review.content }}</p>
-{% else %}
-  <em>There is no reviews</em>
-{% endfor %}
+  <hr class="my-4">
 
-{% if is_granted('ROLE_USER') %}
-    {{ render(controller(
-      'App\\\\Controller\\\\ReviewController::new',
-      { movieId: movie.id }
-    )) }}
+  <h3>Reviews</h3>
+  {% if reviews|length %}
+    <ul class="list-unstyled">
+      {% for rev in reviews %}
+        <li class="mb-3">
+          <div>
+            <strong>{{ rev.author.username }}</strong>
+            <span class="text-muted">— {{ rev.createdAt|date('Y-m-d H:i') }}</span>
+          </div>
+          <div>Rating: {{ rev.rating }}/10</div>
+          {% if rev.content %}
+            <p>{{ rev.content }}</p>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No reviews yet.</p>
   {% endif %}
 
-    <a href="{{ path('app_movie_index') }}">back to list</a>
+  <div class="card mt-4">
+    <div class="card-body">
+      <h4>Add your review</h4>
+      {{ form_start(form) }}
+        <div class="mb-3">{{ form_row(form.rating) }}</div>
+        <div class="mb-3">{{ form_row(form.content) }}</div>
+        <button class="btn btn-primary">Submit Review</button>
+      {{ form_end(form) }}
+    </div>
+  </div>
 
-    <a href="{{ path('app_movie_edit', {'id': movie.id}) }}">edit</a>
-
-    {{ include('movie/_delete_form.html.twig') }}
 {% endblock %}

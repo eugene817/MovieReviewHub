@@ -1,26 +1,84 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-    {% block body %}
-    <a href="{{ path('app_movie_index') }}">Films</a>
-    {% if app.user %}
-      <a href="{{ path('app_movie_new') }}">Add film</a>
-      <span>Привет, {{ app.user.email }}</span>
-      <a href="{{ path('app_logout') }}">Exit</a>
-    {% else %}
-      <a href="{{ path('app_login') }}">Login</a>
-    {% endif %}
-    {% endblock %}
-    </body>
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MovieReviewHub{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# Tailwind через CDN, включая dark-mode #}
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {},
+        }
+      }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body class="dark:bg-gray-900 dark:text-gray-200 min-h-screen flex flex-col">
+
+
+<header class="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-100 p-4 shadow-lg">
+  <div class="container mx-auto flex justify-between items-center">
+    <a href="{{ path('app_home') }}" class="text-2xl font-bold hover:text-white">
+      MovieReviewHub
+    </a>
+    <nav>
+      <ul class="flex space-x-4">
+        {% if app.user %}
+          <li>
+            <a href="{{ path('app_profile') }}"
+               class="hover:underline {{ app.request.attributes.get('_route') == 'app_profile' ? 'font-semibold underline' : '' }}">
+              Profile
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('app_movie_new') }}"
+               class="hover:underline {{ app.request.attributes.get('_route') == 'app_movie_new' ? 'font-semibold underline' : '' }}">
+              Add Movie
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('app_logout') }}" class="hover:underline">
+              Logout
+            </a>
+          </li>
+        {% else %}
+          <li>
+            <a href="{{ path('app_login') }}" class="hover:underline">
+              Login
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('app_register') }}" class="hover:underline">
+              Register
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <main class="flex-grow container mx-auto p-6">
+      {% for label, messages in app.flashes %}
+        <div class="mb-4 p-4 rounded-lg text-white
+                    {% if label == 'success' %}bg-green-600{% elseif label == 'danger' %}bg-red-600{% else %}bg-blue-600{% endif %}
+                    shadow-md">
+          {{ messages|first }}
+        </div>
+      {% endfor %}
+
+      {% block body %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 p-4 text-center">
+      &copy; {{ "now"|date("Y") }} MovieReviewHub
+    </footer>
+
+    {% block scripts %}{% endblock %}
+  </body>
 </html>

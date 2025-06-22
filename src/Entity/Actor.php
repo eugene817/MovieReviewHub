@@ -21,26 +21,12 @@ class Actor
     /**
      * @var Collection<int, Movie>
      */
-    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actors')]
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: "actors")]
     private Collection $movies;
-
-    /**
-     * @var Collection<int, Director>
-     */
-    #[ORM\ManyToMany(targetEntity: Director::class, mappedBy: 'actors')]
-    private Collection $directors;
-
-    /**
-     * @var Collection<int, Genre>
-     */
-    #[ORM\ManyToMany(targetEntity: Genre::class, mappedBy: 'actors')]
-    private Collection $genres;
 
     public function __construct()
     {
         $this->movies = new ArrayCollection();
-        $this->directors = new ArrayCollection();
-        $this->genres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,60 +68,6 @@ class Actor
     {
         if ($this->movies->removeElement($movie)) {
             $movie->removeActor($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Director>
-     */
-    public function getDirectors(): Collection
-    {
-        return $this->directors;
-    }
-
-    public function addDirector(Director $director): static
-    {
-        if (!$this->directors->contains($director)) {
-            $this->directors->add($director);
-            $director->addActor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDirector(Director $director): static
-    {
-        if ($this->directors->removeElement($director)) {
-            $director->removeActor($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Genre>
-     */
-    public function getGenres(): Collection
-    {
-        return $this->genres;
-    }
-
-    public function addGenre(Genre $genre): static
-    {
-        if (!$this->genres->contains($genre)) {
-            $this->genres->add($genre);
-            $genre->addActor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGenre(Genre $genre): static
-    {
-        if ($this->genres->removeElement($genre)) {
-            $genre->removeActor($this);
         }
 
         return $this;

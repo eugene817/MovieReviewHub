@@ -37,19 +37,33 @@ class Movie
     /**
      * @var Collection<int, Actor>
      */
-    #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
+    #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: "movies")]
     private Collection $actors;
+
+    /**
+     * @var Collection<int, Genre>
+     */
+    #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: "movies")]
+    private Collection $genres;
+
+    /**
+     * @var Collection<int, Director>
+     */
+    #[ORM\ManyToMany(targetEntity: Director::class, inversedBy: "movies")]
+    private Collection $directors;
 
     /**
      * @var Collection<int, Review>
      */
-    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'movie')]
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: "movie")]
     private Collection $reviews;
 
     public function __construct()
     {
         $this->actors = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->genres = new ArrayCollection();
+        $this->directors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +193,57 @@ class Movie
                 $review->setMovie(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Genre>
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+
+    public function addGenre(Genre $genre): static
+    {
+        if (!$this->genres->contains($genre)) {
+            $this->genres->add($genre);
+            $genre->addMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): static
+    {
+        if ($this->genres->removeElement($genre)) {
+            $genre->removeMovie($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Director>
+     */
+    public function getDirectors(): Collection
+    {
+        return $this->directors;
+    }
+
+    public function addDirector(Director $director): static
+    {
+        if (!$this->directors->contains($director)) {
+            $this->directors->add($director);
+        }
+
+        return $this;
+    }
+
+    public function removeDirector(Director $director): static
+    {
+        $this->directors->removeElement($director);
 
         return $this;
     }
