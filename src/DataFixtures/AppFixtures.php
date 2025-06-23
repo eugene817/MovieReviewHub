@@ -11,7 +11,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // Жанры
         $genres = ["Action", "Comedy", "Drama", "Thriller", "Sci-Fi", "Horror"];
         foreach ($genres as $name) {
             $g = new Genre();
@@ -19,7 +18,6 @@ class AppFixtures extends Fixture
             $manager->persist($g);
         }
 
-        // Актёры
         $actors = [
             "Leonardo DiCaprio",
             "Scarlett Johansson",

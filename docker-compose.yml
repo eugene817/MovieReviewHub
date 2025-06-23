@@ -1,0 +1,40 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: symfony_php
+    env_file:
+      - .env
+    volumes:
+      - ./:/srv/app
+    working_dir: /srv/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+      - mailer
+    # Запускаем встроенный PHP-сервер
+    command: php -d memory_limit=512M -S 0.0.0.0:8000 -t public/
+
+  database:
+    image: postgres:16
+    container_name: symfony_db
+    environment:
+      POSTGRES_USER: moviehub
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: movie_review_hub
+    ports:
+      - "5433:5432" # или 5432:5432, если порт свободен
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  mailer:
+    image: mailhog/mailhog
+    container_name: symfony_mailer
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+volumes:
+  db_data:

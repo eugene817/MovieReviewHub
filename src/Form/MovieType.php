@@ -19,28 +19,28 @@ class MovieType extends AbstractType
     ): void {
         $builder
             ->add("title", TextType::class, [
-                "label" => "Название",
+                "label" => "Name",
             ])
             ->add("genres", EntityType::class, [
                 "class" => Genre::class,
                 "choice_label" => "name",
                 "multiple" => true,
                 "expanded" => false,
-                "label" => "Жанры",
+                "label" => "Genre",
             ])
             ->add("directors", EntityType::class, [
                 "class" => Director::class,
                 "choice_label" => "name",
                 "multiple" => true,
                 "expanded" => false,
-                "label" => "Режиссёры",
+                "label" => "Director",
             ])
             ->add("actors", EntityType::class, [
                 "class" => Actor::class,
                 "choice_label" => "name",
                 "multiple" => true,
                 "expanded" => false,
-                "label" => "Актёры",
+                "label" => "Actor",
             ]);
     }
 

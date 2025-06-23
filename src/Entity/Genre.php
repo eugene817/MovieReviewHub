@@ -66,28 +66,4 @@ class Genre
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Director>
-     */
-    public function getDirectors(): Collection
-    {
-        return $this->directors;
-    }
-
-    public function addDirector(Director $director): static
-    {
-        if (!$this->directors->contains($director)) {
-            $this->directors->add($director);
-        }
-
-        return $this;
-    }
-
-    public function removeDirector(Director $director): static
-    {
-        $this->directors->removeElement($director);
-
-        return $this;
-    }
 }
