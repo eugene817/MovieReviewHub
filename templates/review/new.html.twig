@@ -1,11 +1,31 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}New Review{% endblock %}
 
 {% block body %}
-    <h1>Create new Review</h1>
-
-    {{ include('review/_form.html.twig') }}
-
-    <a href="{{ path('app_review_index') }}">back to list</a>
+  <div class="max-w-lg mx-auto bg-gray-800 rounded-2xl shadow-lg p-8">
+    <h1 class="text-2xl font-bold mb-6 text-white">Create New Review</h1>
+    {{ form_start(form) }}
+      {# Пример полей: rating и comment, замените на свои #}
+      <div class="mb-4">
+        {{ form_row(form.rating, {
+          attr: {
+            class: 'block w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2'
+          }
+        }) }}
+      </div>
+      <div class="mb-4">
+        {{ form_row(form.comment, {
+          attr: {
+            class: 'block w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2'
+          }
+        }) }}
+      </div>
+      <div class="flex justify-between items-center">
+        <button type="submit" class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md text-white">Save</button>
+        <a href="{{ path('app_review_index') }}" class="text-indigo-300 hover:underline">Back to list</a>
+      </div>
+    {{ form_end(form) }}
+  </div>
 {% endblock %}
